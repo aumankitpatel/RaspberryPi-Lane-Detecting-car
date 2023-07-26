@@ -1,3 +1,4 @@
+#include "motor_controls.h"
 #include <iostream>
 #include <wiringPi.h>
 #include <chrono>
@@ -7,17 +8,13 @@ using namespace std;
 using namespace chrono;
 using namespace this_thread;
 
-class MotorControls{
-    private:
+extern "C" {
+    MotorControls*
+createMotorControls(int in1, int in2, int in3 , int in4) {
+        return new MotorControls(in1, in2, in3, in4);
+    }
 
-    int IN1;
-    int IN2;
-    int IN3;
-    int IN4;
-    public:
-
-
-    MotorControls(int in1, int in2, int in3, int in4) {
+    MotorControls::MotorControls(int in1, int in2, int in3, int in4) {
         IN1 = in1;
         IN2 = in2;
         IN3 = in3;
@@ -30,7 +27,7 @@ class MotorControls{
         pinMode(IN4, OUTPUT);
     }
 
-    void Forward(int forward_time) {
+    void MotorControls::Forward(int forward_time) {
         digitalWrite(IN1, HIGH);
         digitalWrite(IN2, LOW);
         digitalWrite(IN3, HIGH);
@@ -42,7 +39,7 @@ class MotorControls{
         digitalWrite(IN4, LOW);
     }
 
-    void Backward(int backward_time) {
+    void MotorControls::Backward(int backward_time) {
         digitalWrite(IN1, LOW);
         digitalWrite(IN2, HIGH);
         digitalWrite(IN3, LOW);
@@ -54,7 +51,7 @@ class MotorControls{
         digitalWrite(IN4, LOW);
     }
 
-    void Right(int right_time) {
+    void MotorControls::Right(int right_time) {
         digitalWrite(IN1, HIGH);
         digitalWrite(IN2, LOW);
         digitalWrite(IN3, HIGH);
@@ -64,10 +61,9 @@ class MotorControls{
         digitalWrite(IN2, LOW);
         digitalWrite(IN3, LOW);
         digitalWrite(IN4, LOW);
-
     }
 
-    void Left(int left_time) {
+    void MotorControls::Left(int left_time) {
         digitalWrite(IN1, LOW);
         digitalWrite(IN2, HIGH);
         digitalWrite(IN3, LOW);
@@ -77,19 +73,5 @@ class MotorControls{
         digitalWrite(IN2, LOW);
         digitalWrite(IN3, LOW);
         digitalWrite(IN4, LOW);
-
     }
-};
-
-
-
-int main() {
-    MotorControls motor(23,24,22,27);
-
-    motor.Forward(5);
-    motor.Backward(7);
-    motor.Right(5);
-    motor.Left(10);
-
-    return 0;
 }
